@@ -607,6 +607,8 @@ class LightCurveEstimator(object):
 
         Returns
         -------
+        useinterval : bool
+            Is True if the time_interval produce a valid flux point
         measurements : dict
             Dictionary with flux point measurement in the time interval
         """
