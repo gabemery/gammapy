@@ -319,6 +319,49 @@ class LightCurveEstimator(object):
         )
         return lc
 
+    def create_fixed_significance_bin_lc_v2(self, significance, significance_method, spectral_model
+                                         , energy_range, spectrum_extraction):
+        """
+        Create time intervals and a light curve using those intervals such that each bin reach a given significance
+        ### To Do : add dead time separator to force the start of new point? ###
+        ### To Do : check logic ###
+
+        :param significance: float
+            Target significance for each light curve point
+        :param significance_method:
+            Select the method used to compute the significance ### unused yet ###
+        :param spectral_model: `~gammapy.spectrum.models.SpectralModel`
+            Spectral model
+        :param energy_range: `~astropy.units.Quantity`
+            True energy range to evaluate integrated flux (true energy)
+        :param spectrum_extraction: `~gammapy.spectrum.SpectrumExtraction`
+       Contains statistics, IRF and event lists
+        :return: `~gammapy.time.LightCurve`
+            Light curve
+        """
+        def gettime(item):
+            return item[0]
+
+        time_holder = []
+        obs_properties = []
+        i=0
+
+        for obs in spectrum_extraction.obs_list:
+            time_holder.append([obs.events.time.min().value-0.0000001,'start'])
+            time_holder.append([obs.events.time.max().value+0.0000001,'end'])
+            obs_properties.append([obs.observation_dead_time_fraction,spectrum_extraction.bkg_estimate[i].a_off])
+            i+=1
+        for obs in self.on_evt_list:
+            for time in obs.time.value:
+                time_holder.append([time,'on'])
+        for obs in self.off_evt_list:
+            for time in obs.time.value:
+                time_holder.append([time,'off'])
+        time_holder=sorted(time_holder,key=gettime)
+        print(time_holder)
+        intervals=[]
+        i=0
+
     def create_fixed_significance_bin_lc(self, significance, significance_method, spectral_model
                                          , energy_range, spectrum_extraction):
         """
