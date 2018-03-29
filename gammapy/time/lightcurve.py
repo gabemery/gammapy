@@ -358,6 +358,8 @@ class LightCurveEstimator(object):
             time_holder.append([obs.events.time.max().value+0.0000001,'end'])
             obs_properties.append([obs.observation_dead_time_fraction,spectrum_extraction.bkg_estimate[n_obs].a_off])
             n_obs+=1
+
+        #wrong list, need to use the same events as the lc computation
         for obs in self.on_evt_list:
             for time in obs.time.value:
                 time_holder.append([time,'on'])
