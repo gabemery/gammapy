@@ -340,8 +340,8 @@ class EventList(object):
         """Select events in time interval.
         """
         time = self.time
-        mask = (time_interval[0] <= time)
-        mask &= (time < time_interval[1])
+        mask = (time_interval[0].value <= time.value)
+        mask &= (time.value < time_interval[1].value)
         return self.select_row_subset(mask)
 
     def select_sky_cone(self, center, radius):
